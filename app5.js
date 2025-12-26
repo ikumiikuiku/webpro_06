@@ -15,44 +15,40 @@ app.use(express.urlencoded({ extended: true }));
 let castles = [
     { id: 1, name: "姫路城", pref: "兵庫県", height: "46m", access: "姫路駅から徒歩20分", area: "233ha" },
     { id: 2, name: "松本城", pref: "長野県", height: "29m", access: "松本駅から徒歩15分", area: "39ha" },
-    { id: 3, name: "大阪城", pref: "大阪府", height: "58m", access: "大阪城公園駅から徒歩1分", area: "105ha" },
+    { id: 3, name: "大阪城", pref: "大阪府", height: "58m", access: "大阪城公園駅からすぐ", area: "105ha" },
     { id: 4, name: "名古屋城", pref: "愛知県", height: "56m", access: "市役所駅から徒歩5分", area: "25ha" },
     { id: 5, name: "首里城", pref: "沖縄県", height: "16m", access: "首里駅から徒歩15分", area: "5ha" },
     { id: 6, name: "彦根城", pref: "滋賀県", height: "16m", access: "彦根駅から徒歩15分", area: "26ha" },
     { id: 7, name: "熊本城", pref: "熊本県", height: "30m", access: "熊本城・市役所前駅から徒歩5分", area: "98ha" }
 ];
 
-// 2. SHISHAMO (バンド) データ (songs) - 3件
 // 2. SHISHAMO (バンド) データ (songs) - 7件
 let songs = [
-  { id: 1, name: "明日も", date: "2017/02/22", type: "アルバム『SHISHAMO 4』", duration: "6:09", impression: "元気が出る応援ソング。ドコモCM曲。" },
-  { id: 2, name: "君と夏フェス", date: "2014/07/02", type: "シングル", duration: "3:45", impression: "夏フェスに行きたくなる定番曲。" },
-  { id: 3, name: "恋する", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "6:12", impression: "キャッチーなメロディが特徴的。" },
-  { id: 4, name: "僕に彼女ができたんだ", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "3:09", impression: "デビュー当時の代表曲。" },
-  { id: 5, name: "ねぇ、", date: "2018/06/20", type: "アルバム『SHISHAMO 5』", duration: "3:40", impression: "カルピスウォーターCMソング。" },
-  { id: 6, name: "ハッピーエンド", date: "2021/06/30", type: "シングル", duration: "4:24", impression: "切ない歌詞が心に響く。" },
-  { id: 7, name: "狙うは君のど真ん中", date: "2021/06/30", type: "シングル", duration: "3:36", impression: "ポップで可愛いラブソング。" }
+    { id: 1, name: "明日も", date: "2017/02/22", type: "アルバム『SHISHAMO 4』", duration: "6:09", impression: "元気が出る応援ソング。ドコモCM曲。" },
+    { id: 2, name: "君と夏フェス", date: "2014/07/02", type: "シングル", duration: "3:45", impression: "夏フェスに行きたくなる定番曲。" },
+    { id: 3, name: "恋する", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "6:12", impression: "キャッチーなメロディが特徴的。" },
+    { id: 4, name: "僕に彼女ができたんだ", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "3:09", impression: "デビュー当時の代表曲。" },
+    { id: 5, name: "ねぇ、", date: "2018/06/20", type: "アルバム『SHISHAMO 5』", duration: "3:40", impression: "カルピスウォーターCMソング。" },
+    { id: 6, name: "ハッピーエンド", date: "2021/06/30", type: "アルバム『SHISHAMO 7』", duration: "4:24", impression: "切ない歌詞が心に響く。" },
+    { id: 7, name: "狙うは君のど真ん中", date: "2021/06/30", type: "アルバム『SHISHAMO 7』", duration: "3:36", impression: "ポップで可愛いラブソング。" }
 ];
 
 // 3. グミ図鑑データ (gummies) - 7件
 let gummies = [
-    { id: 1, name: "果汁グミ", texture: "普通", price: "120円", flavors: "ぶどう, みかん, もも", maker: "明治" },
-    { id: 2, name: "ハリボー", texture: "硬め", price: "250円", flavors: "コーラ, フルーツ", maker: "HARIBO" },
-    { id: 3, name: "ピュレグミ", texture: "シャリシャリ", price: "140円", flavors: "レモン, グレープ", maker: "カンロ" },
-    { id: 4, name: "コロロ", texture: "プチッと", price: "140円", flavors: "グレープ, マスカット", maker: "UHA味覚糖" },
+    { id: 1, name: "果汁グミ", texture: "スタンダード", price: "138円", flavors: "ぶどう, みかん, もも", maker: "明治" },
+    { id: 2, name: "ハリボー ゴールドベア", texture: "硬め", price: "250円", flavors: "パイナップル, レモン, ラズベリー等", maker: "HARIBO" },
+    { id: 3, name: "ピュレグミ", texture: "シャリシャリ", price: "140円", flavors: "レモン, グレープ, マスカット", maker: "カンロ" },
+    { id: 4, name: "コロロ", texture: "プチッと弾ける", price: "140円", flavors: "グレープ, マスカット, ソーダ", maker: "UHA味覚糖" },
     { id: 5, name: "フェットチーネグミ", texture: "アルデンテ", price: "110円", flavors: "イタリアングレープ, ピーチ", maker: "ブルボン" },
-    { id: 6, name: "忍者めし", texture: "ハード", price: "110円", flavors: "梅かつお, 巨峰", maker: "UHA味覚糖" },
-    { id: 7, name: "タフグミ", texture: "超弾力", price: "200円", flavors: "コーラ, エナジードリンク", maker: "カバヤ" }
+    { id: 6, name: "忍者めし", texture: "ハード", price: "110円", flavors: "梅かつお, 巨峰, ラムネ", maker: "UHA味覚糖" },
+    { id: 7, name: "タフグミ", texture: "超高弾力", price: "200円", flavors: "コーラ, エナジードリンク, ソーダ", maker: "カバヤ" }
 ];
 
 // ===================================================
 // ルーティング処理
 // ===================================================
 
-// --- トップページ (メニュー) ---
-app.get("/", (req, res) => {
-    res.render('index'); 
-});
+// ※トップページ (/) のルートは削除しました
 
 // ---------------------------------------------------
 // 1. 日本の城 (Castles) のCRUD
