@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>城情報の編集</title></head>
+<body>
+    <h2><%= data.name %> の情報を編集</h2>
+    <form action="/castles/update/<%= data.id %>" method="POST">
+        <div>
+            <label>城の名前:</label>
+            <input type="text" name="name" value="<%= data.name %>" required>
+        </div>
+        <div>
+            <label>所在地(県):</label>
+            <input type="text" name="pref" value="<%= data.pref %>">
+        </div>
+        <div>
+            <label>高さ:</label>
+            <input type="text" name="height" value="<%= data.height %>">
+        </div>
+        <div>
+            <label>最寄駅と距離:</label>
+            <input type="text" name="access" value="<%= data.access %>">
+        </div>
+        <div>
+            <label>面積:</label>
+            <input type="text" name="area" value="<%= data.area %>">
+        </div>
+        <br>
+        <input type="submit" value="更新する">
+    </form>
+    <a href="/castles">一覧に戻る</a>
+</body>
+</html>

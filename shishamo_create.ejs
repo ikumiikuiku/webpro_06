@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>楽曲の新規登録</title></head>
+<body>
+    <h2>新しい曲を登録 (SHISHAMO)</h2>
+    <form action="/shishamo" method="POST">
+        <div>
+            <label>曲名:</label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label>発売日:</label>
+            <input type="text" name="date" placeholder="YYYY/MM/DD">
+        </div>
+        <div>
+            <label>区分(アルバム/シングル):</label>
+            <input type="text" name="type">
+        </div>
+        <div>
+            <label>曲の長さ:</label>
+            <input type="text" name="duration">
+        </div>
+        <div>
+            <label>曲の感想:</label>
+            <textarea name="impression"></textarea>
+        </div>
+        <br>
+        <input type="submit" value="登録">
+    </form>
+    <a href="/shishamo">一覧に戻る</a>
+</body>
+</html>

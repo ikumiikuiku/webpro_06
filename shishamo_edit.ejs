@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>楽曲情報の編集</title></head>
+<body>
+    <h2><%= data.name %> の情報を編集</h2>
+    <form action="/shishamo/update/<%= data.id %>" method="POST">
+        <div>
+            <label>曲名:</label>
+            <input type="text" name="name" value="<%= data.name %>" required>
+        </div>
+        <div>
+            <label>発売日:</label>
+            <input type="text" name="date" value="<%= data.date %>">
+        </div>
+        <div>
+            <label>区分:</label>
+            <input type="text" name="type" value="<%= data.type %>">
+        </div>
+        <div>
+            <label>曲の長さ:</label>
+            <input type="text" name="duration" value="<%= data.duration %>">
+        </div>
+        <div>
+            <label>曲の感想:</label>
+            <textarea name="impression"><%= data.impression %></textarea>
+        </div>
+        <br>
+        <input type="submit" value="更新する">
+    </form>
+    <a href="/shishamo">一覧に戻る</a>
+</body>
+</html>

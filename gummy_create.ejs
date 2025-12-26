@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>グミの新規登録</title></head>
+<body>
+    <h2>新しいグミを登録</h2>
+    <form action="/gummy" method="POST">
+        <div>
+            <label>グミの名前:</label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label>弾力:</label>
+            <input type="text" name="texture">
+        </div>
+        <div>
+            <label>値段:</label>
+            <input type="text" name="price">
+        </div>
+        <div>
+            <label>フレーバーの種類:</label>
+            <input type="text" name="flavors">
+        </div>
+        <div>
+            <label>会社名:</label>
+            <input type="text" name="maker">
+        </div>
+        <br>
+        <input type="submit" value="登録">
+    </form>
+    <a href="/gummy">一覧に戻る</a>
+</body>
+</html>

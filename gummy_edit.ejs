@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>グミ情報の編集</title></head>
+<body>
+    <h2><%= data.name %> の情報を編集</h2>
+    <form action="/gummy/update/<%= data.id %>" method="POST">
+        <div>
+            <label>グミの名前:</label>
+            <input type="text" name="name" value="<%= data.name %>" required>
+        </div>
+        <div>
+            <label>弾力:</label>
+            <input type="text" name="texture" value="<%= data.texture %>">
+        </div>
+        <div>
+            <label>値段:</label>
+            <input type="text" name="price" value="<%= data.price %>">
+        </div>
+        <div>
+            <label>フレーバーの種類:</label>
+            <input type="text" name="flavors" value="<%= data.flavors %>">
+        </div>
+        <div>
+            <label>会社名:</label>
+            <input type="text" name="maker" value="<%= data.maker %>">
+        </div>
+        <br>
+        <input type="submit" value="更新する">
+    </form>
+    <a href="/gummy">一覧に戻る</a>
+</body>
+</html>

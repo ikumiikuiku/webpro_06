@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>日本の城一覧</title></head>
+<body>
+    <h2>日本の城データベース</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>城名</th>
+            <th>所在地</th>
+            <th>高さ</th>
+            <th>操作</th>
+        </tr>
+        <% for(let row of data) { %>
+        <tr>
+            <td><%= row.id %></td>
+            <td><a href="/castles/<%= row.id %>"><%= row.name %></a></td>
+            <td><%= row.pref %></td>
+            <td><%= row.height %></td>
+            <td>
+                <a href="/castles/edit/<%= row.id %>">編集</a>
+                <a href="/castles/delete/<%= row.id %>">削除</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+    <p><a href="/castles/create">新しい城を追加</a> | <a href="/">トップへ戻る</a></p>
+</body>
+</html>

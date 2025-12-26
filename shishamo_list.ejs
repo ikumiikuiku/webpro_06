@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>SHISHAMO 楽曲リスト</title></head>
+<body>
+    <h2>SHISHAMO 楽曲一覧</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>曲名</th>
+            <th>発売日</th>
+            <th>区分</th>
+            <th>操作</th>
+        </tr>
+        <% for(let row of data) { %>
+        <tr>
+            <td><%= row.id %></td>
+            <td><a href="/shishamo/<%= row.id %>"><%= row.name %></a></td>
+            <td><%= row.date %></td>
+            <td><%= row.type %></td>
+            <td>
+                <a href="/shishamo/edit/<%= row.id %>">編集</a>
+                <a href="/shishamo/delete/<%= row.id %>">削除</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+    <p><a href="/shishamo/create">新曲を追加</a> | <a href="/">トップへ戻る</a></p>
+</body>
+</html>

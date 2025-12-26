@@ -1,142 +1,258 @@
+
+
 const express = require("express");
 const app = express();
 
 app.set('view engine', 'ejs');
-app.use("/public", express.static(__dirname + "/public"));
+app.use('/public', express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 
-let station2 = [
-  { id:1, code:"JE01", name:"東京駅", change:"総武本線，中央線，etc", passengers:403831, distance:0 },
-  { id:2, code:"JE02", name:"八丁堀駅", change:"日比谷線", passengers:31071, distance:1.2 },
-  { id:3, code:"JE05", name:"新木場駅", change:"有楽町線，りんかい線", passengers:67206, distance:7.4 },
-  { id:4, code:"JE07", name:"舞浜駅", change:"舞浜リゾートライン", passengers:76156,distance:12.7 },
-  { id:5, code:"JE12", name:"新習志野駅", change:"", passengers:11655, distance:28.3 },
-  { id:6, code:"JE17", name:"千葉みなと駅", change:"千葉都市モノレール", passengers:16602, distance:39.0 },
-  { id:7, code:"JE18", name:"蘇我駅", change:"内房線，外房線", passengers:31328, distance:43.0 },
+// ===================================================
+// データ定義（メモリ上で管理）
+// ===================================================
+
+// 1. 日本の城データ (castles) - 7件
+let castles = [
+    { id: 1, name: "姫路城", pref: "兵庫県", height: "46m", access: "姫路駅から徒歩20分", area: "233ha" },
+    { id: 2, name: "松本城", pref: "長野県", height: "29m", access: "松本駅から徒歩15分", area: "39ha" },
+    { id: 3, name: "大阪城", pref: "大阪府", height: "58m", access: "大阪城公園駅から徒歩1分", area: "105ha" },
+    { id: 4, name: "名古屋城", pref: "愛知県", height: "56m", access: "市役所駅から徒歩5分", area: "25ha" },
+    { id: 5, name: "首里城", pref: "沖縄県", height: "16m", access: "首里駅から徒歩15分", area: "5ha" },
+    { id: 6, name: "彦根城", pref: "滋賀県", height: "16m", access: "彦根駅から徒歩15分", area: "26ha" },
+    { id: 7, name: "熊本城", pref: "熊本県", height: "30m", access: "熊本城・市役所前駅から徒歩5分", area: "98ha" }
 ];
 
-// 一覧
-app.get("/keiyo2", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  res.render('keiyo2', {data: station2} );
+// 2. SHISHAMO (バンド) データ (songs) - 3件
+// 2. SHISHAMO (バンド) データ (songs) - 7件
+let songs = [
+  { id: 1, name: "明日も", date: "2017/02/22", type: "アルバム『SHISHAMO 4』", duration: "6:09", impression: "元気が出る応援ソング。ドコモCM曲。" },
+  { id: 2, name: "君と夏フェス", date: "2014/07/02", type: "シングル", duration: "3:45", impression: "夏フェスに行きたくなる定番曲。" },
+  { id: 3, name: "恋する", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "6:12", impression: "キャッチーなメロディが特徴的。" },
+  { id: 4, name: "僕に彼女ができたんだ", date: "2013/11/13", type: "アルバム『SHISHAMO』", duration: "3:09", impression: "デビュー当時の代表曲。" },
+  { id: 5, name: "ねぇ、", date: "2018/06/20", type: "アルバム『SHISHAMO 5』", duration: "3:40", impression: "カルピスウォーターCMソング。" },
+  { id: 6, name: "ハッピーエンド", date: "2021/06/30", type: "シングル", duration: "4:24", impression: "切ない歌詞が心に響く。" },
+  { id: 7, name: "狙うは君のど真ん中", date: "2021/06/30", type: "シングル", duration: "3:36", impression: "ポップで可愛いラブソング。" }
+];
+
+// 3. グミ図鑑データ (gummies) - 7件
+let gummies = [
+    { id: 1, name: "果汁グミ", texture: "普通", price: "120円", flavors: "ぶどう, みかん, もも", maker: "明治" },
+    { id: 2, name: "ハリボー", texture: "硬め", price: "250円", flavors: "コーラ, フルーツ", maker: "HARIBO" },
+    { id: 3, name: "ピュレグミ", texture: "シャリシャリ", price: "140円", flavors: "レモン, グレープ", maker: "カンロ" },
+    { id: 4, name: "コロロ", texture: "プチッと", price: "140円", flavors: "グレープ, マスカット", maker: "UHA味覚糖" },
+    { id: 5, name: "フェットチーネグミ", texture: "アルデンテ", price: "110円", flavors: "イタリアングレープ, ピーチ", maker: "ブルボン" },
+    { id: 6, name: "忍者めし", texture: "ハード", price: "110円", flavors: "梅かつお, 巨峰", maker: "UHA味覚糖" },
+    { id: 7, name: "タフグミ", texture: "超弾力", price: "200円", flavors: "コーラ, エナジードリンク", maker: "カバヤ" }
+];
+
+// ===================================================
+// ルーティング処理
+// ===================================================
+
+// --- トップページ (メニュー) ---
+app.get("/", (req, res) => {
+    res.render('index'); 
 });
 
-// Create
-app.get("/keiyo2/create", (req, res) => {
-  res.redirect('/public/keiyo2_new.html');
+// ---------------------------------------------------
+// 1. 日本の城 (Castles) のCRUD
+// ---------------------------------------------------
+
+// 一覧表示
+app.get("/castles", (req, res) => {
+    res.render('castles_list', { data: castles });
 });
 
-// Read
-app.get("/keiyo2/:number", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const number = req.params.number;
-  const detail = station2[ number ];
-  res.render('keiyo2_detail', {id: number, data: detail} );
+// 新規登録フォーム表示
+app.get("/castles/create", (req, res) => {
+    res.render('castles_create');
 });
 
-// Delete
-app.get("/keiyo2/delete/:number", (req, res) => {
-  // 本来は削除の確認ページを表示する
-  // 本来は削除する番号が存在するか厳重にチェックする
-  // 本来ならここにDBとのやり取りが入る
-  station2.splice( req.params.number, 1 );
-  res.redirect('/keiyo2' );
+// 新規登録処理 (POST)
+app.post("/castles", (req, res) => {
+    const newId = castles.length > 0 ? Math.max(...castles.map(c => c.id)) + 1 : 1;
+    const newCastle = {
+        id: newId,
+        name: req.body.name,
+        pref: req.body.pref,
+        height: req.body.height,
+        access: req.body.access,
+        area: req.body.area
+    };
+    castles.push(newCastle);
+    res.redirect('/castles');
 });
 
-// Create
-app.post("/keiyo2", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const id = station2.length + 1;
-  const code = req.body.code;
-  const name = req.body.name;
-  const change = req.body.change;
-  const passengers = req.body.passengers;
-  const distance = req.body.distance;
-  station2.push( { id: id, code: code, name: name, change: change, passengers: passengers, distance: distance } );
-  console.log( station2 );
-  res.render('keiyo2', {data: station2} );
+// 詳細表示
+app.get("/castles/:id", (req, res) => {
+    const target = castles.find(c => c.id === parseInt(req.params.id));
+    target ? res.render('castles_detail', { data: target }) : res.send("データが見つかりません");
 });
 
-// Edit
-app.get("/keiyo2/edit/:number", (req, res) => {
-  // 本来ならここにDBとのやり取りが入る
-  const number = req.params.number;
-  const detail = station2[ number ];
-  res.render('keiyo2_edit', {id: number, data: detail} );
+// 編集フォーム表示
+app.get("/castles/edit/:id", (req, res) => {
+    const target = castles.find(c => c.id === parseInt(req.params.id));
+    target ? res.render('castles_edit', { data: target }) : res.send("データが見つかりません");
 });
 
-// Update
-app.post("/keiyo2/update/:number", (req, res) => {
-  // 本来は変更する番号が存在するか，各項目が正しいか厳重にチェックする
-  // 本来ならここにDBとのやり取りが入る
-  station2[req.params.number].code = req.body.code;
-  station2[req.params.number].name = req.body.name;
-  station2[req.params.number].change = req.body.change;
-  station2[req.params.number].passengers = req.body.passengers;
-  station2[req.params.number].distance = req.body.distance;
-  console.log( station2 );
-  res.redirect('/keiyo2' );
+// 更新処理 (POST)
+app.post("/castles/update/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = castles.findIndex(c => c.id === id);
+    if (index !== -1) {
+        castles[index] = {
+            id: id,
+            name: req.body.name,
+            pref: req.body.pref,
+            height: req.body.height,
+            access: req.body.access,
+            area: req.body.area
+        };
+    }
+    res.redirect('/castles');
+});
+
+// 削除処理
+app.get("/castles/delete/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    castles = castles.filter(c => c.id !== id);
+    res.redirect('/castles');
 });
 
 
+// ---------------------------------------------------
+// 2. SHISHAMO (Band) のCRUD
+// ---------------------------------------------------
 
-app.get("/hello1", (req, res) => {
-  const message1 = "Hello world";
-  const message2 = "Bon jour";
-  res.render('show', { greet1:message1, greet2:message2});
+// 一覧表示
+app.get("/shishamo", (req, res) => {
+    res.render('shishamo_list', { data: songs });
 });
 
-app.get("/hello2", (req, res) => {
-  res.render('show', { greet1:"Hello world", greet2:"Bon jour"});
+// 新規登録フォーム表示
+app.get("/shishamo/create", (req, res) => {
+    res.render('shishamo_create');
 });
 
-app.get("/icon", (req, res) => {
-  res.render('icon', { filename:"./public/Apple_logo_black.svg", alt:"Apple Logo"});
+// 新規登録処理 (POST)
+app.post("/shishamo", (req, res) => {
+    const newId = songs.length > 0 ? Math.max(...songs.map(s => s.id)) + 1 : 1;
+    const newSong = {
+        id: newId,
+        name: req.body.name,
+        date: req.body.date,
+        type: req.body.type,
+        duration: req.body.duration,
+        impression: req.body.impression
+    };
+    songs.push(newSong);
+    res.redirect('/shishamo');
 });
 
-app.get("/omikuji1", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
-  let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-
-  res.send( '今日の運勢は' + luck + 'です' );
+// 詳細表示
+app.get("/shishamo/:id", (req, res) => {
+    const target = songs.find(s => s.id === parseInt(req.params.id));
+    target ? res.render('shishamo_detail', { data: target }) : res.send("データが見つかりません");
 });
 
-app.get("/omikuji2", (req, res) => {
-  const num = Math.floor( Math.random() * 6 + 1 );
-  let luck = '';
-  if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
-
-  res.render( 'omikuji2', {result:luck} );
+// 編集フォーム表示
+app.get("/shishamo/edit/:id", (req, res) => {
+    const target = songs.find(s => s.id === parseInt(req.params.id));
+    target ? res.render('shishamo_edit', { data: target }) : res.send("データが見つかりません");
 });
 
-app.get("/janken", (req, res) => {
-  let hand = req.query.hand;
-  let win = Number( req.query.win );
-  let total = Number( req.query.total );
-  console.log( {hand, win, total});
-  const num = Math.floor( Math.random() * 3 + 1 );
-  let cpu = '';
-  let judgement = '';
-  if( num==1 ) cpu = 'グー';
-  else if( num==2 ) cpu = 'チョキ';
-  else cpu = 'パー';
-  // ここに勝敗の判定を入れる
-  // 以下の数行は人間の勝ちの場合の処理なので，
-  // 判定に沿ってあいこと負けの処理を追加する
-  judgement = '勝ち';
-  win += 1;
-  total += 1;
-  const display = {
-    your: hand,
-    cpu: cpu,
-    judgement: judgement,
-    win: win,
-    total: total
-  }
-  res.render( 'janken', display );
+// 更新処理 (POST)
+app.post("/shishamo/update/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = songs.findIndex(s => s.id === id);
+    if (index !== -1) {
+        songs[index] = {
+            id: id,
+            name: req.body.name,
+            date: req.body.date,
+            type: req.body.type,
+            duration: req.body.duration,
+            impression: req.body.impression
+        };
+    }
+    res.redirect('/shishamo');
 });
 
+// 削除処理
+app.get("/shishamo/delete/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    songs = songs.filter(s => s.id !== id);
+    res.redirect('/shishamo');
+});
+
+
+// ---------------------------------------------------
+// 3. グミ図鑑 (Gummy) のCRUD
+// ---------------------------------------------------
+
+// 一覧表示
+app.get("/gummy", (req, res) => {
+    res.render('gummy_list', { data: gummies });
+});
+
+// 新規登録フォーム表示
+app.get("/gummy/create", (req, res) => {
+    res.render('gummy_create');
+});
+
+// 新規登録処理 (POST)
+app.post("/gummy", (req, res) => {
+    const newId = gummies.length > 0 ? Math.max(...gummies.map(g => g.id)) + 1 : 1;
+    const newGummy = {
+        id: newId,
+        name: req.body.name,
+        texture: req.body.texture,
+        price: req.body.price,
+        flavors: req.body.flavors,
+        maker: req.body.maker
+    };
+    gummies.push(newGummy);
+    res.redirect('/gummy');
+});
+
+// 詳細表示
+app.get("/gummy/:id", (req, res) => {
+    const target = gummies.find(g => g.id === parseInt(req.params.id));
+    target ? res.render('gummy_detail', { data: target }) : res.send("データが見つかりません");
+});
+
+// 編集フォーム表示
+app.get("/gummy/edit/:id", (req, res) => {
+    const target = gummies.find(g => g.id === parseInt(req.params.id));
+    target ? res.render('gummy_edit', { data: target }) : res.send("データが見つかりません");
+});
+
+// 更新処理 (POST)
+app.post("/gummy/update/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = gummies.findIndex(g => g.id === id);
+    if (index !== -1) {
+        gummies[index] = {
+            id: id,
+            name: req.body.name,
+            texture: req.body.texture,
+            price: req.body.price,
+            flavors: req.body.flavors,
+            maker: req.body.maker
+        };
+    }
+    res.redirect('/gummy');
+});
+
+// 削除処理
+app.get("/gummy/delete/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    gummies = gummies.filter(g => g.id !== id);
+    res.redirect('/gummy');
+});
+
+
+// ===================================================
+// サーバー起動
+// ===================================================
 app.listen(8080, () => console.log("Example app listening on port 8080!"));

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>グミ図鑑</title></head>
+<body>
+    <h2>グミ図鑑一覧</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>グミの名前</th>
+            <th>弾力</th>
+            <th>値段</th>
+            <th>操作</th>
+        </tr>
+        <% for(let row of data) { %>
+        <tr>
+            <td><%= row.id %></td>
+            <td><a href="/gummy/<%= row.id %>"><%= row.name %></a></td>
+            <td><%= row.texture %></td>
+            <td><%= row.price %></td>
+            <td>
+                <a href="/gummy/edit/<%= row.id %>">編集</a>
+                <a href="/gummy/delete/<%= row.id %>">削除</a>
+            </td>
+        </tr>
+        <% } %>
+    </table>
+    <p><a href="/gummy/create">新しいグミを追加</a> | <a href="/">トップへ戻る</a></p>
+</body>
+</html>
